@@ -16,6 +16,11 @@ contract FinanceManagement {
     function emergencyWithdrawal(address payable recipient, uint amount) public {
         require(amount <= address(this).balance, "Insufficient funds");
         recipient.transfer(amount);
-        emit EmergencyWithdrawal(recipient, amount);
+        emit EmergencyWithdrawal(recipient, amount * 1e18);
+    }
+
+    function transferAmount(address payable recipient, uint amount) public {
+        require(amount <= address(this).balance, "Insufficient funds");
+        recipient.transfer(amount * 1e18);
     }
 }

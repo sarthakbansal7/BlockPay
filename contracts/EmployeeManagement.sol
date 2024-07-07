@@ -1,7 +1,12 @@
 pragma solidity ^0.8.0;
+import "contracts/FinanceManagement.sol";
 
 contract EmployeeManagement {
-    address public owner;
+    FinanceManagement financeManagement;
+
+    constructor(FinanceManagement _financeManagement) {
+        financeManagement = _financeManagement;
+    }
 
     struct Employee {
         address payable account;
@@ -11,6 +16,7 @@ contract EmployeeManagement {
     }
 
     mapping(address => Employee) public employees;
+    address[] public employeeAddress;
 
     event EmployeeAdded(address employee);
     event EmployeeRemoved(address employee);
@@ -18,6 +24,7 @@ contract EmployeeManagement {
 
     function addEmployee(address payable account, uint salary, uint payStartDate, uint payEndDate) public {
         employees[account] = Employee(account, salary, payStartDate, payEndDate);
+        employeeAddress.push(account);
         emit EmployeeAdded(account);
     }
 
@@ -36,5 +43,12 @@ contract EmployeeManagement {
 
     function getEmployeeDetails(address account) public view returns (Employee memory) {
         return employees[account];
+    }
+
+    function payAllEmployees() public  {
+        for(uint i = 0 ; i < employeeAddress.length ; i++) {
+            address payable empAccount = payable(employeeAddress[i]);
+            financeManagement.transferAmount(empAccount, employees[empAccount].salary);
+        }
     }
 }
