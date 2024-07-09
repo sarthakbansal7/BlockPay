@@ -33,6 +33,14 @@ contract BlockPay {
         employeeManagement.removeEmployee(account);
     }    
 
+    function updateEmployee(address account, uint newSalary, uint newPayStartDate, uint newPayEndDate) public {
+        employeeManagement.updateEmployee(account, newSalary, newPayStartDate, newPayEndDate);
+    }
+
+    function getEmployeeDetails(address account) public view returns (address, uint, uint, uint) {
+        return employeeManagement.getEmployeeDetails(account);
+    }
+
     function payAllEmployees() public  {
         employeeManagement.payAllEmployees();
     }
