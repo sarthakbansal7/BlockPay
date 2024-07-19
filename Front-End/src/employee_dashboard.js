@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./styles.css";
+import "./employee_dashboard.css";
 import Sidebar from "./components/Sidebar";
 import MainContent from "./components/MainContent";
 import TransactionHistory from "./components/TransactionHistory";
