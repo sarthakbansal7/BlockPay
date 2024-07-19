@@ -1,9 +1,13 @@
-/*import React, { useState } from "react";
+
+
+import React, { useState } from "react";
+
 import myVector from "./Vector.svg";
 
 const RegisterCompany = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [userRole, setUserRole] = useState("Employee");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -11,6 +15,10 @@ const RegisterCompany = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handleRoleChange = (event) => {
+    setUserRole(event.target.value);
   };
 
   return (
@@ -59,7 +67,7 @@ const RegisterCompany = () => {
 }
 
 .register-container {
-  background: rgba(255, 255, 255, 0.1); /* semi-transparent background */
+  background: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -79,12 +87,12 @@ const RegisterCompany = () => {
 .form-input {
   padding: 10px;
   margin-bottom: 15px;
-  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+  background-color: rgba(255, 255, 255, 0.8); 
   color: #333;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
-  width: calc(100% - 20px); /* To account for padding */
+  width: calc(100% - 20px); 
   box-sizing: border-box;
 }
 
@@ -115,18 +123,18 @@ const RegisterCompany = () => {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: rgba(110, 71, 255, 0.8); /* semi-transparent background */
+  background-color: rgba(110, 71, 255, 0.8); 
   color: #fff;
   font-size: 16px;
   cursor: pointer;
-  width: calc(100% - 20px); /* To account for padding */
+  width: calc(100% - 20px); 
   box-sizing: border-box;
   margin-bottom: 20px;
 }
 
 .submit-btn:hover,
 .metamask-btn:hover {
-  background: rgba(78, 1, 154, 0.8); /* semi-transparent background */
+  background: rgba(78, 1, 154, 0.8); 
 }
 
 a {
@@ -163,172 +171,86 @@ p {
           
         `}
       </style>
-    <div className="app-container light-mode">
-      <img
-        src={myVector}
-        alt="background vector"
-        className="background-vector"
-      />
-      <div className="top-bar">
-        <div className="brand">BlockPay</div>
-      </div>
-      <div className="register-container">
-        <h1>Login As An Employee</h1>
-        <form className="register-form">
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Enter company name"
-            name="companyName"
-            required
-          />
-          <input
-            type="text"
-            className="form-input"
-            placeholder="username"
-            name="companyName"
-            required
-          />
-
-          <div className="password-container">
+      <div className="app-container light-mode">
+        <img
+          src={myVector}
+          alt="background vector"
+          className="background-vector"
+        />
+        <div className="top-bar">
+          <div className="brand">BlockPay</div>
+        </div>
+        <div className="register-container">
+          <h1>Login As An {userRole}</h1>
+          <form className="register-form">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type="text"
               className="form-input"
-              placeholder="Password"
-              name="password"
+              placeholder="Enter company name"
+              name="companyName"
               required
             />
-            <span
-              onClick={togglePasswordVisibility}
-              className="toggle-visibility"
-            >
-              {passwordVisible ? "🙈" : "👁️"}
-            </span>
-          </div>
-
-          <div>
-            <button type="submit" className="submit-btn">
-              Log In
-            </button>
-          </div>
-
-          <div>
-            <p>
-              Don't have an account?{" "}
-              <button className="SignIn-btn">Sign Up</button>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
-    </div>
-  );
-};
-
-export default RegisterCompany;
-*/
-
-import React, { useState } from "react";
-import "./login.css";
-import myVector from "./Vector.svg";
-
-const RegisterCompany = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [userRole, setUserRole] = useState("Employee");
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
-  };
-
-  const handleRoleChange = (event) => {
-    setUserRole(event.target.value);
-  };
-
-  return (
-    <div className="app-container light-mode">
-      <img
-        src={myVector}
-        alt="background vector"
-        className="background-vector"
-      />
-      <div className="top-bar">
-        <div className="brand">BlockPay</div>
-      </div>
-      <div className="register-container">
-        <h1>Login As An {userRole}</h1>
-        <form className="register-form">
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Enter company name"
-            name="companyName"
-            required
-          />
-          <input
-            type="text"
-            className="form-input"
-            placeholder="username"
-            name="companyName"
-            required
-          />
-
-          <div className="password-container">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type="text"
               className="form-input"
-              placeholder="Password"
-              name="password"
+              placeholder="username"
+              name="companyName"
               required
             />
-            <span
-              onClick={togglePasswordVisibility}
-              className="toggle-visibility"
-            >
-              {passwordVisible ? "🙈" : "👁️"}
-            </span>
-          </div>
 
-          <div className="role-selection">
-            <label>
+            <div className="password-container">
               <input
-                type="radio"
-                value="Employer"
-                checked={userRole === "Employer"}
-                onChange={handleRoleChange}
-                className="role-radio"
+                type={passwordVisible ? "text" : "password"}
+                className="form-input"
+                placeholder="Password"
+                name="password"
+                required
               />
-              Employer
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="Employee"
-                checked={userRole === "Employee"}
-                onChange={handleRoleChange}
-                className="role-radio"
-              />
-              Employee
-            </label>
-          </div>
+              <span
+                onClick={togglePasswordVisibility}
+                className="toggle-visibility"
+              >
+                {passwordVisible ? "🙈" : "👁️"}
+              </span>
+            </div>
 
-          <div>
-            <button type="submit" className="submit-btn">
-              Log In
-            </button>
-          </div>
+            <div className="role-selection">
+              <label>
+                <input
+                  type="radio"
+                  value="Employer"
+                  checked={userRole === "Employer"}
+                  onChange={handleRoleChange}
+                  className="role-radio"
+                />
+                Employer
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="Employee"
+                  checked={userRole === "Employee"}
+                  onChange={handleRoleChange}
+                  className="role-radio"
+                />
+                Employee
+              </label>
+            </div>
 
-          <div>
-            <p>
-              Don't have an account?{" "}
-              <button className="SignIn-btn">Sign Up</button>
-            </p>
-          </div>
-        </form>
+            <div>
+              <button type="submit" className="submit-btn">
+                Log In
+              </button>
+            </div>
+
+            <div>
+              <p>
+                Don't have an account?{" "}
+                <button className="SignIn-btn">Sign Up</button>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
