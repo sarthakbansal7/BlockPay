@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import MainContent from "./components/MainContent";
-import Countries from "./icons/countries.png";
+import Sidebar from "./components3/Sidebar";
+import MainContent from "./components3/MainContent";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState("Dashboard");
