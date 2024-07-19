@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import MainContent from "./components/MainContent";
+import Sidebar from "./components2/Sidebar";
+import MainContent from "./components2/MainContent";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState("Dashboard");
