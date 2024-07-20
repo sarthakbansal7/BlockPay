@@ -302,17 +302,17 @@ const Dashboard = () => {
           }
           
           .mapImage, .countriesImage {
-            height: 410px;
+            height: auto;
             border: 1px solid #444444;
           }
           
           .mapImage {
-            width: 865px;
+            width: 60%;
             border-radius: 6px 0px 0px 6px;
           }
           
           .countriesImage {
-            width: 355px;
+            width: 35%;
             border-radius: 0px 6px 6px 0px;
           }
 

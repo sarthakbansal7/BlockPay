@@ -57,11 +57,12 @@ const RegisterCompany = () => {
     // TODO
     if (data.token) {
       localStorage.setItem("token", data.token);
+      localStorage.setItem("username", formValues.username);
+      localStorage.setItem("company", formValues.companyName.toUpperCase());
 
       if (isHR) {
         navigate("/hr-dashboard");
       } else {
-        localStorage.setItem("username", formValues.username);
         navigate("/employee-dashboard");
       }
     } else {
@@ -112,6 +113,7 @@ const RegisterCompany = () => {
 .brand {
   font-size: 24px;
   color: white;
+  cursor: pointer;
 }
 
 .register-container {
@@ -226,7 +228,9 @@ p {
           className="background-vector"
         />
         <div className="top-bar">
-          <div className="brand">BlockPay</div>
+          <div className="brand" onClick={() => navigate("/")}>
+            BlockPay
+          </div>
         </div>
         <div className="register-container">
           <h1>Login As An {userRole}</h1>

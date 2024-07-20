@@ -34,7 +34,7 @@ const icons = {
 const Sidebar = ({ selected, handleItemClick }) => {
   return (
     <aside className="sidebar">
-      <div className="company-name">Your Company</div>
+      <div className="company-name">{localStorage.getItem("company")}</div>
       <nav className="sidebar-menu">
         <ul>
           {[

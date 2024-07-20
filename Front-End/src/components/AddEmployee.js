@@ -85,6 +85,7 @@ const AddEmployee = () => {
     .brand {
       font-size: 24px;
       color: white;
+      cursor: pointer;
     }
     
     .register-container {
@@ -199,7 +200,9 @@ const AddEmployee = () => {
           className="background-vector"
         />
         <div className="top-bar">
-          <div className="brand">BlockPay</div>
+          <div className="brand" onClick={() => navigate("/")}>
+            BlockPay
+          </div>
         </div>
         <div className="register-container">
           <h1>Add Employee</h1>

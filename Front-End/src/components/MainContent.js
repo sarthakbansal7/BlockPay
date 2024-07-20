@@ -21,9 +21,10 @@ import { useNavigate } from "react-router-dom";
 
 const MainContent = ({ logo, children, salaries, salary, account }) => {
   const navigate = useNavigate();
+  const scale = 1e18;
+
   const getTotalSalary = () => {
     let salary = 0;
-    const scale = 1e18;
 
     for (const ele of salaries) {
       salary += (Number(ele) * 1.0) / scale;
@@ -35,7 +36,9 @@ const MainContent = ({ logo, children, salaries, salary, account }) => {
   return (
     <main className="main-content">
       <header className="main-header">
-        <div className="logohome">BlockPay</div>
+        <div className="logohome" onClick={() => navigate("/")}>
+          BlockPay
+        </div>
         <div className="user-profile">
           <img
             src={settingsIcon}
@@ -117,7 +120,7 @@ const MainContent = ({ logo, children, salaries, salary, account }) => {
               alt="Check List Icons"
               className="card-icons"
             />
-            <p>{salary}</p>
+            <p>{`${Number(salary) / scale} ether`}</p>
             <h2>Employee Account</h2>
             <p>{account}</p>
           </div>

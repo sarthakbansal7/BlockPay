@@ -81,7 +81,7 @@ const MainContent = ({ logo, children }) => {
   return (
     <main className="main-content">
       <header className="main-header">
-        <div className="logohome">BlockPay</div>
+        <div className="logohome" onClick={() => navigate("/")}>BlockPay</div>
         <div className="user-profile">
           <img
             src={settingsIcon}
@@ -95,7 +95,7 @@ const MainContent = ({ logo, children }) => {
           />
           <button onClick={() => logout(navigate, "/login")}>Logout</button>
           <div className="user-info">
-            <span>Thomas Fleming</span>
+            <span>{localStorage.getItem("username")}</span>
             <span>info@gmail.com</span>
           </div>
         </div>
