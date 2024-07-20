@@ -1,13 +1,29 @@
-
-
 import React, { useState } from "react";
 
 import myVector from "./Vector.svg";
+import { useNavigate } from "react-router-dom";
+import domain from "./domain";
+import axios from "axios";
 
 const RegisterCompany = () => {
+  const [formValues, setFormValues] = useState({
+    companyName: "",
+    username: "",
+    password: "",
+    userRole: "Employer",
+  });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [userRole, setUserRole] = useState("Employee");
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -19,6 +35,33 @@ const RegisterCompany = () => {
 
   const handleRoleChange = (event) => {
     setUserRole(event.target.value);
+    setFormValues({
+      ...formValues,
+      userRole: event.target.value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Form Values: ", formValues);
+
+    const url = `${domain}/login`;
+    console.log(url);
+    const res = await axios.post(url, {
+      companyName: formValues.companyName,
+      username: formValues.username,
+      password: formValues.password,
+      isHR: formValues.userRole === "Employer",
+    });
+    const data = res.data;
+
+    // TODO
+    if (data.token) {
+      navigate("/dashboard");
+    }
+    else {
+      console.log("Login error");
+    }
   };
 
   return (
@@ -182,28 +225,33 @@ p {
         </div>
         <div className="register-container">
           <h1>Login As An {userRole}</h1>
-          <form className="register-form">
+          <form className="register-form" onSubmit={handleSubmit}>
             <input
               type="text"
               className="form-input"
               placeholder="Enter company name"
               name="companyName"
+              value={formValues.companyName}
+              onChange={handleInputChange}
               required
             />
             <input
               type="text"
               className="form-input"
               placeholder="username"
-              name="companyName"
+              name="username"
+              value={formValues.username}
+              onChange={handleInputChange}
               required
             />
-
             <div className="password-container">
               <input
                 type={passwordVisible ? "text" : "password"}
                 className="form-input"
                 placeholder="Password"
                 name="password"
+                value={formValues.password}
+                onChange={handleInputChange}
                 required
               />
               <span
@@ -213,13 +261,12 @@ p {
                 {passwordVisible ? "🙈" : "👁️"}
               </span>
             </div>
-
             <div className="role-selection">
               <label>
                 <input
                   type="radio"
                   value="Employer"
-                  checked={userRole === "Employer"}
+                  checked={formValues.userRole === "Employer"}
                   onChange={handleRoleChange}
                   className="role-radio"
                 />
@@ -229,24 +276,28 @@ p {
                 <input
                   type="radio"
                   value="Employee"
-                  checked={userRole === "Employee"}
+                  checked={formValues.userRole === "Employee"}
                   onChange={handleRoleChange}
                   className="role-radio"
                 />
                 Employee
               </label>
             </div>
-
             <div>
               <button type="submit" className="submit-btn">
                 Log In
               </button>
             </div>
-
             <div>
               <p>
                 Don't have an account?{" "}
-                <button className="SignIn-btn">Sign Up</button>
+                <button
+                  className="SignIn-btn"
+                  type="button"
+                  onClick={() => navigate("/register")}
+                >
+                  Sign Up
+                </button>
               </p>
             </div>
           </form>

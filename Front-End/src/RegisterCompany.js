@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import myVector from "./Vector.svg";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import domain from "./domain";
 
 const RegisterCompany = () => {
+  const [formValues, setFormValues] = useState({
+    companyName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -11,6 +30,26 @@ const RegisterCompany = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Form Values: ", formValues);
+    // Here you can handle the form submission, such as sending the data to an API
+    const url = `${domain}/register`;
+    const res = await axios.post(url, {
+      companyName: formValues.companyName,
+      username: formValues.username,
+      password: formValues.password,
+    });
+    console.log(res);
+    const data = res.data;
+
+    if (data.status === "success") {
+      navigate("/login");
+    } else {
+      console.log("Register error");
+    }
   };
 
   return (
@@ -164,28 +203,33 @@ const RegisterCompany = () => {
         </div>
         <div className="register-container">
           <h1>Register Your Company</h1>
-          <form className="register-form">
+          <form className="register-form" onSubmit={handleSubmit}>
             <input
               type="text"
               className="form-input"
               placeholder="Enter company name"
               name="companyName"
+              value={formValues.companyName}
+              onChange={handleInputChange}
               required
             />
             <input
               type="text"
               className="form-input"
               placeholder="username"
-              name="companyName"
+              name="username"
+              value={formValues.username}
+              onChange={handleInputChange}
               required
             />
-
             <div className="password-container">
               <input
                 type={passwordVisible ? "text" : "password"}
                 className="form-input"
                 placeholder="Password"
                 name="password"
+                value={formValues.password}
+                onChange={handleInputChange}
                 required
               />
               <span
@@ -201,6 +245,8 @@ const RegisterCompany = () => {
                 className="form-input"
                 placeholder="Re-password"
                 name="confirmPassword"
+                value={formValues.confirmPassword}
+                onChange={handleInputChange}
                 required
               />
               <span
@@ -213,11 +259,16 @@ const RegisterCompany = () => {
             <button type="submit" className="submit-btn">
               Sign Up
             </button>
-
             <div>
               <p>
                 Already have an account?{" "}
-                <button className="SignIn-btn">Sign In</button>
+                <button
+                  className="SignIn-btn"
+                  type="button"
+                  onClick={() => navigate("/login")}
+                >
+                  Sign In
+                </button>
               </p>
             </div>
           </form>

@@ -11,6 +11,8 @@ import FAQsSection from "./components/FAQsSection";
 import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 import HrDashboard from "./hr_onboard";
+import Login from "./login";
+import Register from "./RegisterCompany";
 
 const App = () => {
   return (
@@ -33,6 +35,8 @@ const App = () => {
           }
         />
         <Route path="/dashboard" element={<HrDashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );
