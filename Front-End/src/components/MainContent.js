@@ -16,10 +16,22 @@ import v24volume from "../icons/24volume.svg";
 import upgreenarrow from "../icons/upgreenarrow.svg";
 import downredarrow from "../icons/downredarrow.svg";
 import notificationIcon from "../icons/notification.svg";
-const MainContent = ({ logo, children }) => {
-  const totalTasks = 28;
-  const completedTasks = 20;
-  const completionPercentage = (completedTasks / totalTasks) * 100;
+import { logout } from "../utils/sidebarClick";
+import { useNavigate } from "react-router-dom";
+
+const MainContent = ({ logo, children, salaries, salary, account }) => {
+  const navigate = useNavigate();
+  const getTotalSalary = () => {
+    let salary = 0;
+    const scale = 1e18;
+
+    for (const ele of salaries) {
+      salary += (Number(ele) * 1.0) / scale;
+    }
+
+    return salary;
+  };
+
   return (
     <main className="main-content">
       <header className="main-header">
@@ -35,9 +47,9 @@ const MainContent = ({ logo, children }) => {
             alt="Notifications"
             className="icon notification-icon"
           />
-          <button>Logout</button>
+          <button onClick={() => logout(navigate, "/login")}>Logout</button>
           <div className="user-info">
-            <span>Thomas Fleming</span>
+            <span>{localStorage.getItem("username")}</span>
             <span>info@gmail.com</span>
           </div>
         </div>
@@ -56,7 +68,7 @@ const MainContent = ({ logo, children }) => {
               alt="Blue Dollar Icon"
               className="card-icon"
             />
-            <p>$1200.00</p>
+            <p>{`${getTotalSalary()} ether`}</p>
             <div className="chart">
               <img src={BlueLine} alt="Blue Line Chart" />
             </div>
@@ -64,12 +76,12 @@ const MainContent = ({ logo, children }) => {
           <div className="card">
             <h2>Total Bonus</h2>
             <img src={RedDollar} alt="Red Dollar Icon" className="card-icon" />
-            <p>$120.00</p>
+            <p>0 ether</p>
             <div className="chart">
               <img src={RedLine} alt="Red Line Chart" />
             </div>
           </div>
-          <div className="card all-projects-card">
+          {/* <div className="card all-projects-card">
             <div className="all-projects-content">
               <img
                 src={CircularGraph}
@@ -97,23 +109,17 @@ const MainContent = ({ logo, children }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="card">
-            <h2>Total Deposit</h2>
+            <h2>Employee Salary</h2>
             <img
               src={CheckList}
               alt="Check List Icons"
               className="card-icons"
             />
-            <p>20</p>
-            <div className="progress-bar">
-              <div
-                className="progress"
-                style={{ width: `${completionPercentage}%` }}
-              >
-                {completedTasks}/{totalTasks}
-              </div>
-            </div>
+            <p>{salary}</p>
+            <h2>Employee Account</h2>
+            <p>{account}</p>
           </div>
         </section>
       </div>

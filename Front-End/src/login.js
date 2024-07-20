@@ -61,6 +61,7 @@ const RegisterCompany = () => {
       if (isHR) {
         navigate("/hr-dashboard");
       } else {
+        localStorage.setItem("username", formValues.username);
         navigate("/employee-dashboard");
       }
     } else {

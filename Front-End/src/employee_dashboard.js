@@ -1,16 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import Sidebar from "./components/Sidebar";
 import MainContent from "./components/MainContent";
 import TransactionHistory from "./components/TransactionHistory";
 import blockPayLogo from "./icons/blockpay-logo.png";
+import domain from "./domain";
+import axios from "axios";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState("Dashboard");
+  const [salaries, setSalaries] = useState([]);
+  const [account, setAccount] = useState("");
+  const [salary, setSalary] = useState("");
 
   const handleItemClick = (item) => {
     setSelected(item);
   };
+
+  const employeeHistory = async () => {
+    try {
+      const url = `${domain}/employee/history`;
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setSalaries(res.data.data);
+    } catch (err) {
+      console.log("Employee history error");
+    }
+  };
+
+  const employeeDetails = async () => {
+    try {
+      const url = `${domain}/employee`;
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setAccount(res.data.data.account);
+      setSalary(res.data.data.salary);
+    } catch (err) {
+      console.log("Employee history error");
+    }
+  };
+
+  useEffect(() => {
+    employeeHistory();
+    employeeDetails();
+  }, []);
 
   return (
     <div>
@@ -536,8 +581,13 @@ const Dashboard = () => {
       </style>
       <div className="dashboard">
         <Sidebar selected={selected} handleItemClick={handleItemClick} />
-        <MainContent logo={blockPayLogo}>
-          <TransactionHistory />
+        <MainContent
+          logo={blockPayLogo}
+          salaries={salaries}
+          salary={salary}
+          account={account}
+        >
+          <TransactionHistory salaries={salaries} account={account} />
         </MainContent>
       </div>
     </div>
