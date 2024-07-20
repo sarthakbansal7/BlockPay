@@ -1,5 +1,9 @@
+export const logout = (navigate, url) => {
+  navigate(url);
+};
+
 const handleItemClick = (item, setSelected, navigate) => {
-    console.log("hi");
+  console.log("hi");
   if (item === "Employees") {
     navigate("/admin-employee-section");
   } else if (item === "Finance") {

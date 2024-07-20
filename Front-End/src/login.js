@@ -43,7 +43,6 @@ const RegisterCompany = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form Values: ", formValues);
 
     const isHR = formValues.userRole === "Employer";
     const url = `${domain}/login`;

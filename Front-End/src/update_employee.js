@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import Sidebar from "./components2/Sidebar";
+import Sidebar from "./components3/Sidebar";
 import MainContent from "./components2/MainContent";
+import { useLocation, useNavigate } from "react-router-dom";
+import sidebarClick from "./utils/sidebarClick";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const data = location.state || {};
   const [selected, setSelected] = useState("Dashboard");
 
   const handleItemClick = (item) => {
-    setSelected(item);
+    sidebarClick(item, setSelected, navigate);
   };
 
   return (
@@ -417,7 +422,7 @@ const Dashboard = () => {
       </style>
       <div className="dashboard">
         <Sidebar selected={selected} handleItemClick={handleItemClick} />
-        <MainContent />
+        <MainContent employee={data} />
       </div>
     </div>
   );

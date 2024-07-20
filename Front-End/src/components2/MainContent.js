@@ -14,14 +14,19 @@ import Dp from "../icons/Dp.svg";
 
 import settingsIcon from "../icons/settings.svg";
 import notificationIcon from "../icons/notification.svg";
-const MainContent = ({ logo, children }) => {
+import domain from "../domain";
+import axios from "axios";
+const MainContent = ({ employee }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    FirstName: "Brooklyn",
-    LastName: "Simmons",
+    Name: employee.name,
     Email: "brooklyn.s@example.com",
+    Salary: employee.salary,
+    Account: employee.account,
     MobileNumber: "(702) 555-0122",
     DateOfBirth: "July 14, 1995",
+    PayStartDate: "1",   // TODO
+    PayEndDate: "30",
     Gender: "Female",
     MaritalStatus: "Married",
     Nationality: "America",
@@ -34,8 +39,28 @@ const MainContent = ({ logo, children }) => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setIsEditing(false);
+  const handleSaveClick = async () => {
+    try {
+      const url = `${domain}/admin/update-employee`;
+      const token = localStorage.getItem("token");
+      const bodyData = {
+        "account": "0x670affaBA03808c0c1a0CEFf17820B3d2d4aEfE9",
+        "salary": "20000000000000000",
+        "payStartDate": "1",
+        "payEndDate": "30"
+      }
+      const res = await axios.put(url, bodyData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      setIsEditing(false);
+
+    } catch (err) {
+      console.log("update emp error");
+    }
+    
   };
 
   const handleChange = (e) => {
@@ -117,11 +142,11 @@ const MainContent = ({ logo, children }) => {
         <div className="profile-headerUpdateE">
           <img src={Dp} alt="Profile" className="profile-imgUpdateE" />
           <div className="profile-infoUpdateE">
-            <h2>Brooklyn Simmons</h2>
+            <h2>{employee.name}</h2>
             <br />
             <span>
               <img src={projectManagerIcon} alt="Email" className="Img-icons" />
-              Project Manager
+              {employee.designation}
             </span>
             <br />
             <span>
@@ -130,7 +155,6 @@ const MainContent = ({ logo, children }) => {
             </span>
           </div>
           <div className="profile-actionsUpdateE">
-            <button className="remove-employeeUpdateE">Remove Employee</button>
             <button className="edit-profileUpdateE" onClick={handleEditClick}>
               Edit Profile
             </button>

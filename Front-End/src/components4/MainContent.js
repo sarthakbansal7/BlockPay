@@ -41,62 +41,36 @@ const data = [
   { name: "Oct", value: 680 },
 ];
 
-const employees = [
-  {
-    name: "Ricky Antony",
-    email: "abc@gmail.com",
-    contact: "+91 123 456 7890",
-    gender: "Male",
-    location: "Delhi",
-    position: "Senior",
-    image: Emp1,
-  },
-  {
-    name: "Ricky Antony",
-    email: "abc@gmail.com",
-    contact: "+91 123 456 7890",
-    gender: "Male",
-    location: "Delhi",
-    position: "Intern",
-    image: Emp2,
-  },
-  {
-    name: "Ricky Antony",
-    email: "abc@gmail.com",
-    contact: "+91 123 456 7890",
-    gender: "Male",
-    location: "Delhi",
-    position: "Senior",
-    image: Emp3,
-  },
-  {
-    name: "Ricky Antony",
-    email: "abc@gmail.com",
-    contact: "+91 123 456 7890",
-    gender: "Male",
-    location: "Delhi",
-    position: "Senior",
-    image: Emp1,
-  },
-  {
-    name: "Ricky Antony",
-    email: "abc@gmail.com",
-    contact: "+91 123 456 7890",
-    gender: "Male",
-    location: "Delhi",
-    position: "Intern",
-    image: Emp2,
-  },
-  // ...add other employees
-];
-
 import settingsIcon from "../icons/settings.svg";
 import notificationIcon from "../icons/notification.svg";
 import domain from "../domain";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../utils/sidebarClick";
 
 const MainContent = ({ logo, children }) => {
+  const navigate = useNavigate();
   const [balance, setBalance] = useState("0 ether");
+  const [employees, setEmployees] = useState([]);
+
+  const getAllEmployees = async () => {
+    try {
+      const url = `${domain}/admin/get-all-employees`;
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = res.data;
+      setEmployees(res.data.data);
+    } catch (err) {
+      console.log("get all emps error");
+    }
+  };
+
   const checkBalance = async () => {
     try {
       const url = `${domain}/finance`;
@@ -167,9 +141,9 @@ const MainContent = ({ logo, children }) => {
   };
 
   useEffect(() => {
-    console.log("click");
+    getAllEmployees();
     checkBalance();
-  });
+  }, []);
 
   return (
     <main className="main-content">
@@ -186,7 +160,7 @@ const MainContent = ({ logo, children }) => {
             alt="Notifications"
             className="icon notification-icon"
           />
-          <button>Logout</button>
+          <button onClick={() => logout(navigate, "/login")}>Logout</button>
           <div className="user-info">
             <span>Thomas Fleming</span>
             <span>info@gmail.com</span>
@@ -462,11 +436,11 @@ const MainContent = ({ logo, children }) => {
                 <thead className="table-header">
                   <tr>
                     <th>Employee Name</th>
-                    <th>Email Address</th>
-                    <th>Contact Number</th>
-                    <th>Gender</th>
+                    <th>Account</th>
+                    <th>Salary</th>
+                    <th>Designation</th>
                     <th>Location</th>
-                    <th>Position</th>
+                    <th>Department</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -474,30 +448,27 @@ const MainContent = ({ logo, children }) => {
                     <tr key={index}>
                       <td>
                         <img
-                          src={employee.image}
+                          src={Emp1}
                           alt="Employee"
                           className="employee-image"
                         />
                         {employee.name}
                       </td>
-                      <td>{employee.email}</td>
-                      <td>{employee.contact}</td>
-                      <td>{employee.gender}</td>
-                      <td>{employee.location}</td>
-                      <td className={employee.position.toLowerCase()}>
-                        {employee.position}
-                      </td>
+                      <td>{employee.account}</td>
+                      <td>{employee.salary}</td>
+                      <td>{employee.designation}</td>
+                      <td>{"Delhi"}</td>
+                      <td>{"SDE"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </section>
           </div>
-          <div className="flexxx">
+          <div>
             <button className="PayButton" onClick={payEmployees}>
               Pay all employees
             </button>
-            <button className="PayButton">Pay selected employees</button>
           </div>
         </div>
       </div>

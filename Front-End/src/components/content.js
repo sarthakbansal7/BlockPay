@@ -16,7 +16,11 @@ import v24volume from "../icons/24volume.svg";
 import upgreenarrow from "../icons/upgreenarrow.svg";
 import downredarrow from "../icons/downredarrow.svg";
 import notificationIcon from "../icons/notification.svg";
+import { logout } from "../utils/sidebarClick";
+import { useNavigate } from "react-router-dom";
+
 const Content = ({ logo, children, name }) => {
+  const navigate = useNavigate();
   const totalTasks = 28;
   const completedTasks = 20;
   const completionPercentage = (completedTasks / totalTasks) * 100;
@@ -35,7 +39,7 @@ const Content = ({ logo, children, name }) => {
             alt="Notifications"
             className="icon notification-icon"
           />
-          <button>Logout</button>
+          <button onClick={() => logout(navigate, "/login")}>Logout</button>
           <div className="user-info">
             <span>Thomas Fleming</span>
             <span>info@gmail.com</span>
@@ -48,8 +52,8 @@ const Content = ({ logo, children, name }) => {
 
           <div className="breadcrumb">Home / {name} </div>
         </section>
-        </div>
-        {children}
+      </div>
+      {children}
     </main>
   );
 };

@@ -16,6 +16,8 @@ import Login from "./login";
 import Register from "./RegisterCompany";
 import AdminEmployeeSection from "./admin_employee_section";
 import FinanceDashboard from "./FinanceManagement";
+import AddEmployee from "./components/AddEmployee";
+import UpdateEmployee from "./update_employee";
 
 const App = () => {
   return (
@@ -43,6 +45,8 @@ const App = () => {
           element={<AdminEmployeeSection />}
         />
         <Route path="/finance-dashboard" element={<FinanceDashboard />} />
+        <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="/update-employee" element={<UpdateEmployee />} />
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
 
         <Route path="/login" element={<Login />} />
