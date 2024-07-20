@@ -9,31 +9,32 @@ import CrossBorderPaymentsSection from "./components/CrossBorderPaymentsSection"
 import ReadyToGetStartedSection from "./components/ReadyToGetStartedSection";
 import FAQsSection from "./components/FAQsSection";
 import Footer from "./components/Footer";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 import HrDashboard from "./hr_onboard";
-
-
 
 const App = () => {
   return (
     <div className="apphome">
-      
       <Routes>
-      <Route path="/" element={<div>
-      <Header />
-      <HeroSection />
-      <VideoSection />
-      <ReformSection />
-      <FeaturesSection />
-      <CrossBorderPaymentsSection />
-      <ReadyToGetStartedSection />
-      <FAQsSection />
-      <Footer />
-      </div>} />
-      <Route path="/dashboard" element={<HrDashboard />} />
+        <Route
+          path="/"
+          element={
+            <div>
+              <Header />
+              <HeroSection />
+              <VideoSection />
+              <ReformSection />
+              <FeaturesSection />
+              <CrossBorderPaymentsSection />
+              <ReadyToGetStartedSection />
+              <FAQsSection />
+              <Footer />
+            </div>
+          }
+        />
+        <Route path="/dashboard" element={<HrDashboard />} />
       </Routes>
     </div>
-    
   );
 };
 
