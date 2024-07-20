@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profilePicture from "../icons/profile.svg";
 import projectManagerIcon from "../icons/projectmanager.svg";
 import emailIcon from "../icons/email.svg";
@@ -92,76 +92,85 @@ const employees = [
 
 import settingsIcon from "../icons/settings.svg";
 import notificationIcon from "../icons/notification.svg";
+import domain from "../domain";
+import axios from "axios";
+
 const MainContent = ({ logo, children }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    FirstName: "Brooklyn",
-    LastName: "Simmons",
-    Email: "brooklyn.s@example.com",
-    MobileNumber: "(702) 555-0122",
-    DateOfBirth: "July 14, 1995",
-    Gender: "Female",
-    MaritalStatus: "Married",
-    Nationality: "America",
-    Address: "2464 Royal Ln. Mesa, New Jersey",
-    State: "California",
-    ZipCode: "35624",
-  });
+  const [balance, setBalance] = useState("0 ether");
+  const checkBalance = async () => {
+    try {
+      const url = `${domain}/finance`;
+      const token = localStorage.getItem("token");
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  const handleSaveClick = () => {
-    setIsEditing(false);
-  };
+      const data = res.data;
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const [activeTab, setActiveTab] = useState("personalInfo");
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "personalInfo":
-        return (
-          <div
-            className={`info-rowUpdateE ${
-              isEditing ? "editing-container" : ""
-            }`}
-          >
-            {Object.entries(formData).map(([key, value]) => (
-              <div key={key} className="info-itemUpdateE">
-                <span className="info-labelUpdateE">
-                  {key.replace(/([A-Z])/g, " $1").trim()}:{" "}
-                </span>
-                {isEditing ? (
-                  <div className="editable-form">
-                    <input
-                      type="text"
-                      name={key}
-                      value={value}
-                      onChange={handleChange}
-                      className="editing-input"
-                    />
-                  </div>
-                ) : (
-                  <span className="info-valueUpdateE">{value}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        );
-      case "professionalInfo":
-        return <div>Professional Information Content</div>;
-      case "documents":
-        return <div>Documents Content</div>;
-      case "accountAccess":
-        return <div>Account Access Content</div>;
-      default:
-        return null;
+      if (data.data) {
+        setBalance(data.data);
+      }
+    } catch (err) {
+      console.log("Finance error");
     }
   };
+
+  const depositFunds = async () => {
+    try {
+      const url = `${domain}/finance`;
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        url,
+        {
+          amount: "10", // TODO
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = res.data;
+
+      if (data.status === "success") {
+        checkBalance();
+      }
+    } catch (err) {
+      console.log("Finance error");
+    }
+  };
+
+  const payEmployees = async () => {
+    try {
+      const url = `${domain}/admin/pay-salary`;
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      checkBalance();
+    } catch (err) {
+      console.log("Finance error");
+    }
+  };
+
+  useEffect(() => {
+    console.log("click");
+    checkBalance();
+  });
+
   return (
     <main className="main-content">
       <header className="main-header">
@@ -196,9 +205,14 @@ const MainContent = ({ logo, children }) => {
           <div className="balance-sectionFinance">
             <div className="balance-headerFinance">
               <h2>Total Balance</h2>
-              <button className="add-deposit-buttonFinance">Add Deposit</button>
+              <button
+                className="add-deposit-buttonFinance"
+                onClick={depositFunds}
+              >
+                Add Deposit
+              </button>
             </div>
-            <h1>$66,743.00</h1>
+            <h1>{balance}</h1>
             <div className="balance-graphFinance">
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart className="data" data={data}>
@@ -480,7 +494,9 @@ const MainContent = ({ logo, children }) => {
             </section>
           </div>
           <div className="flexxx">
-            <button className="PayButton">Pay all employees</button>
+            <button className="PayButton" onClick={payEmployees}>
+              Pay all employees
+            </button>
             <button className="PayButton">Pay selected employees</button>
           </div>
         </div>
