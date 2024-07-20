@@ -45,21 +45,26 @@ const RegisterCompany = () => {
     event.preventDefault();
     console.log("Form Values: ", formValues);
 
+    const isHR = formValues.userRole === "Employer";
     const url = `${domain}/login`;
-    console.log(url);
     const res = await axios.post(url, {
       companyName: formValues.companyName,
       username: formValues.username,
       password: formValues.password,
-      isHR: formValues.userRole === "Employer",
+      isHR,
     });
     const data = res.data;
 
     // TODO
     if (data.token) {
-      navigate("/dashboard");
-    }
-    else {
+      localStorage.setItem("token", data.token);
+
+      if (isHR) {
+        navigate("/hr-dashboard");
+      } else {
+        navigate("/employee-dashboard");
+      }
+    } else {
       console.log("Login error");
     }
   };

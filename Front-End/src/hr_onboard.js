@@ -1,16 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import Dashboard from "./Dashboard";
 import Sidebar from "./components/Sidebar";
 import Content from "./components/content";
 import TransactionHistory from "./components/TransactionHistory";
 import blockPayLogo from "./icons/blockpay-logo.png";
+import axios from "axios";
+import domain from "./domain";
+import sidebarClick from "./utils/sidebarClick";
+import { useNavigate } from "react-router-dom";
 
 const HrDashboard = () => {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState("Dashboard");
+  const [totalSalary, setTotalSalary] = useState("0");
 
+  useEffect(() => {
+    const fetchTotalSalary = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const url = `${domain}/admin/total-salary`;
+        const res = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = res.data;
+
+        if (data.data) {
+          setTotalSalary(data.data);
+        }
+      } catch (err) {
+        console.log("fetch total salary error");
+      }
+    };
+
+    fetchTotalSalary();
+  });
   const handleItemClick = (item) => {
-    setSelected(item);
+    sidebarClick(item, setSelected, navigate);
   };
 
   return (
@@ -537,9 +566,8 @@ const HrDashboard = () => {
       </style>
       <div className="dashboard">
         <Sidebar selected={selected} handleItemClick={handleItemClick} />
-        <Content logo={blockPayLogo} name={'Dashboard'}>
-            
-          <Dashboard />
+        <Content logo={blockPayLogo} name={"Dashboard"}>
+          <Dashboard totalSalary={totalSalary} />
         </Content>
       </div>
     </div>

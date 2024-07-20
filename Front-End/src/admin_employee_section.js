@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import Sidebar from "./components3/Sidebar";
 import MainContent from "./components3/MainContent";
+import { useNavigate } from "react-router-dom";
+import sidebarClick from "./utils/sidebarClick";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState("Dashboard");
 
   const handleItemClick = (item) => {
-    setSelected(item);
+    sidebarClick(item, setSelected, navigate);
   };
 
   return (
