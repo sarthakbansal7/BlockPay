@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./RegisterCompany.css";
+
 import myVector from "./Vector.svg";
 
 const RegisterCompany = () => {
