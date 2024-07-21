@@ -598,7 +598,15 @@ headerhome .auth-linkshome .register-btnhome:hover {
   margin-top: 40px;
 }
 
-/* .document-download-btn {
-  height: 10%;
-  width: auto;
-}   */
+.swap-icon {
+  margin: 10px 0;
+  font-size: 24px;
+  cursor: pointer;
+  color: navajowhite;
+  padding-bottom: 10px;
+}
+
+.recieve-address {
+  margin-top: 15px;
+  margin-bottom: 23px;
+}

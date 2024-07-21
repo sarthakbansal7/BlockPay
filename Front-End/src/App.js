@@ -18,6 +18,8 @@ import AdminEmployeeSection from "./admin_employee_section";
 import FinanceDashboard from "./FinanceManagement";
 import AddEmployee from "./components/AddEmployee";
 import UpdateEmployee from "./update_employee";
+import BtcToWbtc from "./components/BtcToWbtc";
+import WbtcToBtc from "./components/WbtcToBtc";
 
 const App = () => {
   return (
@@ -47,10 +49,14 @@ const App = () => {
         <Route path="/finance-dashboard" element={<FinanceDashboard />} />
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/update-employee" element={<UpdateEmployee />} />
+
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/btc-to-wbtc" element={<BtcToWbtc />} />
+        <Route path="/wbtc-to-btc" element={<WbtcToBtc />} />
       </Routes>
     </div>
   );
