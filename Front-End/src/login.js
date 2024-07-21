@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import myVector from "./Vector.svg";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 import domain from "./domain";
 import axios from "axios";
 
@@ -13,6 +14,7 @@ const RegisterCompany = () => {
     userRole: "Employer",
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   const navigate = useNavigate();
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [userRole, setUserRole] = useState("Employee");
@@ -23,6 +25,7 @@ const RegisterCompany = () => {
       ...formValues,
       [name]: value,
     });
+    setErrorMsg(null);
   };
 
   const togglePasswordVisibility = () => {
@@ -39,34 +42,38 @@ const RegisterCompany = () => {
       ...formValues,
       userRole: event.target.value,
     });
+    setErrorMsg(null);
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    try {
+      event.preventDefault();
 
-    const isHR = formValues.userRole === "Employer";
-    const url = `${domain}/login`;
-    const res = await axios.post(url, {
-      companyName: formValues.companyName,
-      username: formValues.username,
-      password: formValues.password,
-      isHR,
-    });
-    const data = res.data;
+      const isHR = formValues.userRole === "Employer";
+      const url = `${domain}/login`;
+      const res = await axios.post(url, {
+        companyName: formValues.companyName,
+        username: formValues.username,
+        password: formValues.password,
+        isHR,
+      });
+      const data = res.data;
+      // TODO
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", formValues.username);
+        localStorage.setItem("company", formValues.companyName.toUpperCase());
 
-    // TODO
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", formValues.username);
-      localStorage.setItem("company", formValues.companyName.toUpperCase());
-
-      if (isHR) {
-        navigate("/hr-dashboard");
+        if (isHR) {
+          navigate("/hr-dashboard");
+        } else {
+          navigate("/employee-dashboard");
+        }
       } else {
-        navigate("/employee-dashboard");
+        setErrorMsg("Wrong Credentials !!");
       }
-    } else {
-      console.log("Login error");
+    } catch (err) {
+      setErrorMsg("Server down !!");
     }
   };
 
@@ -233,6 +240,11 @@ p {
           </div>
         </div>
         <div className="register-container">
+          {errorMsg && (
+            <Alert variant="filled" severity="error">
+              {errorMsg}
+            </Alert>
+          )}
           <h1>Login As An {userRole}</h1>
           <form className="register-form" onSubmit={handleSubmit}>
             <input

@@ -588,8 +588,6 @@ const Dashboard = () => {
           salary={salary}
           account={account}
         >
-          {/* <DocumentsCenter></DocumentsCenter>
-          <TransactionHistory salaries={salaries} account={account} /> */}
         </MainContent>
       </div>
     </div>

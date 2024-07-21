@@ -1,42 +1,64 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
+import Alert from "@mui/material/Alert";
 import myVector from "../Vector.svg";
 import { useNavigate } from "react-router-dom";
 import domain from "../domain";
 import axios from "axios";
 
+const defaultValues = {
+  btc: "",
+  wbtc: "",
+  address: "",
+};
+
 const AddEmployee = () => {
   const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
-    btc: "",
-    wbtc: "",
-    address: "",
-  });
+  const [formValues, setFormValues] = useState(defaultValues);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+
+    if (name === "btc") {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+        ["wbtc"]: (1 - 0.3 / 100) * value,
+      });
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
+    }
+
+    setErrorMsg(null);
+    setSuccessMsg(null);
   };
 
   const handleSubmit = async (event) => {
     try {
-    //   event.preventDefault();
-
-    //   const url = `${domain}/admin/add-employee`;
-    //   const token = localStorage.getItem("token");
-
-    //   const res = await axios.post(url, formValues, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-
-    //   navigate("/admin-employee-section");
+      event.preventDefault();
+      const url = `${domain}/employee/btc-to-wbtc`;
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        url,
+        {
+          amount: formValues.btc,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSuccessMsg("Transaction successfull");
+      setFormValues(defaultValues);
     } catch (err) {
-      console.log("Add employee error");
+      setErrorMsg("Transaction Failed !!");
     }
   };
   return (
@@ -202,6 +224,18 @@ const AddEmployee = () => {
           </div>
         </div>
         <div className="register-container">
+          {errorMsg && (
+            <Alert variant="filled" severity="error">
+              {errorMsg}
+            </Alert>
+          )}
+
+          {successMsg && (
+            <Alert variant="filled" severity="success">
+              {successMsg}
+            </Alert>
+          )}
+
           <h1>Swap BTC To WBTC</h1>
           <form className="register-form" onSubmit={handleSubmit}>
             <input
@@ -223,10 +257,10 @@ const AddEmployee = () => {
             <input
               type="text"
               className="form-input"
-              placeholder="Send WBTC"
+              placeholder="Recieve WBTC"
               name="wbtc"
               value={formValues.wbtc}
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               required
             />
             <input
@@ -236,7 +270,6 @@ const AddEmployee = () => {
               name="address"
               value={formValues.address}
               onChange={handleInputChange}
-              required
             />
             <div>
               <button type="submit" className="submit-btn">

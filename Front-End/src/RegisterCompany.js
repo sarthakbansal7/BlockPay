@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import myVector from "./Vector.svg";
+import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import domain from "./domain";
@@ -12,12 +13,15 @@ const RegisterCompany = () => {
     confirmPassword: "",
   });
 
+  const [errorMsg, setErrorMsg] = useState(null);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormValues({
       ...formValues,
       [name]: value,
     });
+    setErrorMsg(null);
   };
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -33,23 +37,25 @@ const RegisterCompany = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log("Form Values: ", formValues);
-    // Here you can handle the form submission, such as sending the data to an API
-    const url = `${domain}/register`;
-    const res = await axios.post(url, {
-      companyName: formValues.companyName,
-      username: formValues.username,
-      password: formValues.password,
-    });
-    console.log(res);
-    const data = res.data;
-
-    if (data.status === "success") {
-      navigate("/login");
-    } else {
-      console.log("Register error");
+    try {
+      event.preventDefault();
+      const url = `${domain}/register`;
+      const res = await axios.post(url, {
+        companyName: formValues.companyName,
+        username: formValues.username,
+        password: formValues.password,
+      });
+      const data = res.data;
+  
+      if (data.status === "success") {
+        navigate("/login");
+      } else {
+        setErrorMsg("Wrong Credentials !!");
+      }
+    } catch (err) {
+      setErrorMsg("Company already registered");
     }
+    
   };
 
   return (
@@ -205,6 +211,11 @@ const RegisterCompany = () => {
           </div>
         </div>
         <div className="register-container">
+          {errorMsg && (
+            <Alert variant="filled" severity="error">
+              {errorMsg}
+            </Alert>
+          )}
           <h1>Register Your Company</h1>
           <form className="register-form" onSubmit={handleSubmit}>
             <input

@@ -139,7 +139,9 @@ const MainContent = ({ logo, children, salaries, salary, account }) => {
             <h2>Bitcoin</h2>
             <h3>BTC</h3>
             <div className="currency-button-bitcoin">
-              <button>Convert your currency</button>
+              <button onClick={() => navigate("/btc-to-wbtc")}>
+                Convert your currency
+              </button>
             </div>
           </div>
           <div className="watchlist-bitcoin">
@@ -225,7 +227,10 @@ const MainContent = ({ logo, children, salaries, salary, account }) => {
           </div>
         </div>
         <DocumentsCenter></DocumentsCenter>
-        <TransactionHistory salaries={salaries} account={account}></TransactionHistory>
+        <TransactionHistory
+          salaries={salaries}
+          account={account}
+        ></TransactionHistory>
       </section>
     </main>
   );
