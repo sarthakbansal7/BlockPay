@@ -570,3 +570,35 @@ headerhome .auth-linkshome .register-btnhome:hover {
   margin: 10px 0 0;
   padding: 0 20px;
 }
+
+.document-center {
+  background-color: #eff2f41a;
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 10px;
+  width: 500px;
+  overflow-y: scroll;
+  /* Allow scrolling */
+}
+
+.documents-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.document-icon {
+  height: auto;
+  width: 15%;
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+
+/* .document-download-btn {
+  height: 10%;
+  width: auto;
+}   */

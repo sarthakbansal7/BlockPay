@@ -153,8 +153,8 @@ const RegisterCompany = () => {
 
 .toggle-visibility {
   position: absolute;
-  right: 15px;
-  top: 50%;
+  right: 23px;
+  top: 38%;
   transform: translateY(-50%);
   cursor: pointer;
 }

@@ -18,6 +18,8 @@ import downredarrow from "../icons/downredarrow.svg";
 import notificationIcon from "../icons/notification.svg";
 import { logout } from "../utils/sidebarClick";
 import { useNavigate } from "react-router-dom";
+import DocumentsCenter from "./DocumentsCenter";
+import TransactionHistory from "./TransactionHistory";
 
 const MainContent = ({ logo, children, salaries, salary, account }) => {
   const navigate = useNavigate();
@@ -222,7 +224,8 @@ const MainContent = ({ logo, children, salaries, salary, account }) => {
             </div>
           </div>
         </div>
-        {children}
+        <DocumentsCenter></DocumentsCenter>
+        <TransactionHistory salaries={salaries} account={account}></TransactionHistory>
       </section>
     </main>
   );

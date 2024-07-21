@@ -6,6 +6,7 @@ import TransactionHistory from "./components/TransactionHistory";
 import blockPayLogo from "./icons/blockpay-logo.png";
 import domain from "./domain";
 import axios from "axios";
+import DocumentsCenter from "./components/DocumentsCenter";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState("Dashboard");
@@ -587,7 +588,8 @@ const Dashboard = () => {
           salary={salary}
           account={account}
         >
-          <TransactionHistory salaries={salaries} account={account} />
+          {/* <DocumentsCenter></DocumentsCenter>
+          <TransactionHistory salaries={salaries} account={account} /> */}
         </MainContent>
       </div>
     </div>
