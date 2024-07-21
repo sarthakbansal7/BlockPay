@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import myVector from "../Vector.svg";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import LinearProgress from "@mui/material/LinearProgress";
 import domain from "../domain";
 import axios from "axios";
 
@@ -16,7 +18,11 @@ const AddEmployee = () => {
     department: "",
     designation: "",
   });
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [progress, setProgress] = useState(false);
+
   const handleInputChange = (event) => {
+    setErrorMsg(null);
     const { name, value } = event.target;
     setFormValues({
       ...formValues,
@@ -27,6 +33,7 @@ const AddEmployee = () => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      setProgress(true);
 
       const url = `${domain}/admin/add-employee`;
       const token = localStorage.getItem("token");
@@ -37,9 +44,11 @@ const AddEmployee = () => {
         },
       });
 
+      setProgress(false);
       navigate("/admin-employee-section");
     } catch (err) {
-      console.log("Add employee error");
+      setProgress(false);
+      setErrorMsg("Transaction Failed !!")
     }
   };
   return (
@@ -205,6 +214,20 @@ const AddEmployee = () => {
           </div>
         </div>
         <div className="register-container">
+          {progress && (
+            <>
+              <LinearProgress></LinearProgress>
+              <Alert severity="info" className="alert">
+                Transaction is in progress...
+              </Alert>
+            </>
+          )}
+
+          {errorMsg && (
+            <Alert variant="filled" severity="error">
+              {errorMsg}
+            </Alert>
+          )}
           <h1>Add Employee</h1>
           <form className="register-form" onSubmit={handleSubmit}>
             <input

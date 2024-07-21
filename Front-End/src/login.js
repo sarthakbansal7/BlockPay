@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import myVector from "./Vector.svg";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import LinearProgress from "@mui/material/LinearProgress";
 import domain from "./domain";
 import axios from "axios";
 
@@ -18,6 +19,7 @@ const RegisterCompany = () => {
   const navigate = useNavigate();
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [userRole, setUserRole] = useState("Employee");
+  const [progress, setProgress] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -48,6 +50,7 @@ const RegisterCompany = () => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      setProgress(true);
 
       const isHR = formValues.userRole === "Employer";
       const url = `${domain}/login`;
@@ -58,6 +61,8 @@ const RegisterCompany = () => {
         isHR,
       });
       const data = res.data;
+      setProgress(false);
+      
       // TODO
       if (data.token) {
         localStorage.setItem("token", data.token);
@@ -73,6 +78,7 @@ const RegisterCompany = () => {
         setErrorMsg("Wrong Credentials !!");
       }
     } catch (err) {
+      setProgress(false);
       setErrorMsg("Server down !!");
     }
   };
@@ -240,6 +246,15 @@ p {
           </div>
         </div>
         <div className="register-container">
+          {progress && (
+            <>
+              <LinearProgress></LinearProgress>
+              <Alert severity="info" className="alert">
+                Transaction is in progress...
+              </Alert>
+            </>
+          )}
+
           {errorMsg && (
             <Alert variant="filled" severity="error">
               {errorMsg}

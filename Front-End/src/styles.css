@@ -610,3 +610,7 @@ headerhome .auth-linkshome .register-btnhome:hover {
   margin-top: 15px;
   margin-bottom: 23px;
 }
+
+.alert {
+  margin-top: 15px;
+}

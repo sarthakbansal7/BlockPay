@@ -11,6 +11,15 @@ import professionalInfoIcon from "../icons/professionalinfo.svg";
 import documentsIcon from "../icons/documents.svg";
 import accountAccessIcon from "../icons/accountaccess.svg";
 import Dp from "../icons/Dp.svg";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Alert from "@mui/material/Alert";
+import LinearProgress from "@mui/material/LinearProgress";
 import Emp1 from "../icons/emp1.svg";
 import Emp2 from "../icons/emp2.svg";
 import Emp3 from "../icons/emp3.svg";
@@ -52,6 +61,19 @@ const MainContent = ({ logo, children }) => {
   const navigate = useNavigate();
   const [balance, setBalance] = useState("0 ether");
   const [employees, setEmployees] = useState([]);
+  const [progress, setProgress] = useState(false);
+  const [depositProgress, setDepositProgress] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const getAllEmployees = async () => {
     try {
@@ -92,15 +114,16 @@ const MainContent = ({ logo, children }) => {
     }
   };
 
-  const depositFunds = async () => {
+  const depositFunds = async (amount) => {
     try {
+      setDepositProgress(true);
       const url = `${domain}/finance`;
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
         url,
         {
-          amount: "10", // TODO
+          amount,
         },
         {
           headers: {
@@ -109,12 +132,14 @@ const MainContent = ({ logo, children }) => {
         }
       );
 
+      setDepositProgress(false);
       const data = res.data;
 
       if (data.status === "success") {
         checkBalance();
       }
     } catch (err) {
+      setDepositProgress(false);
       console.log("Finance error");
     }
   };
@@ -135,7 +160,10 @@ const MainContent = ({ logo, children }) => {
       );
 
       checkBalance();
+      setProgress(false);
     } catch (err) {
+      setErrorMsg("Transaction Failed !!");
+      setProgress(false);
       console.log("Finance error");
     }
   };
@@ -148,7 +176,9 @@ const MainContent = ({ logo, children }) => {
   return (
     <main className="main-content">
       <header className="main-header">
-        <div className="logohome" onClick={() => navigate("/")}>BlockPay</div>
+        <div className="logohome" onClick={() => navigate("/")}>
+          BlockPay
+        </div>
         <div className="user-profile">
           <img
             src={settingsIcon}
@@ -181,10 +211,61 @@ const MainContent = ({ logo, children }) => {
               <h2>Total Balance</h2>
               <button
                 className="add-deposit-buttonFinance"
-                onClick={depositFunds}
+                onClick={() => setOpen(true)}
               >
                 Add Deposit
               </button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                  component: "form",
+                  onSubmit: async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
+                    const formJson = Object.fromEntries(formData.entries());
+                    const amount = formJson.amount;
+                    setProgress(true);
+                    await depositFunds(amount);
+                    
+                    handleClose();
+                  },
+                }}
+              >
+                <DialogTitle>Deposit Funds</DialogTitle>
+                <DialogContent>
+                  {depositProgress ? (
+                    <>
+                      <LinearProgress />
+                      <Alert severity="info" className="alert">
+                        Transaction is in progress...
+                      </Alert>
+                    </>
+                  ) : (
+                    <>
+                      <DialogContentText>
+                        Enter amount in ether that need to be deposit.
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="amount"
+                        name="amount"
+                        label="Amount"
+                        fullWidth
+                        variant="standard"
+                      />
+                    </>
+                  )}
+                </DialogContent>
+                {!depositProgress && (
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit">Confirm</Button>
+                  </DialogActions>
+                )}
+              </Dialog>
             </div>
             <h1>{balance}</h1>
             <div className="balance-graphFinance">
@@ -466,9 +547,22 @@ const MainContent = ({ logo, children }) => {
             </section>
           </div>
           <div>
-            <button className="PayButton" onClick={payEmployees}>
-              Pay all employees
-            </button>
+            {progress ? (
+              <>
+                <LinearProgress></LinearProgress>
+                <Alert severity="info" className="alert">
+                  Transaction is in progress...
+                </Alert>
+              </>
+            ) : errorMsg ? (
+              <Alert severity="error" className="alert">
+                {errorMsg}
+              </Alert>
+            ) : (
+              <button className="PayButton" onClick={payEmployees}>
+                Pay all employees
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import myVector from "./Vector.svg";
 import Alert from "@mui/material/Alert";
+import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import domain from "./domain";
@@ -24,6 +25,7 @@ const RegisterCompany = () => {
     setErrorMsg(null);
   };
 
+  const [progress, setProgress] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const navigate = useNavigate();
@@ -39,23 +41,25 @@ const RegisterCompany = () => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      setProgress(true);
       const url = `${domain}/register`;
       const res = await axios.post(url, {
         companyName: formValues.companyName,
         username: formValues.username,
         password: formValues.password,
       });
+      setProgress(false);
       const data = res.data;
-  
+
       if (data.status === "success") {
         navigate("/login");
       } else {
         setErrorMsg("Wrong Credentials !!");
       }
     } catch (err) {
+      setProgress(false);
       setErrorMsg("Company already registered");
     }
-    
   };
 
   return (
@@ -211,6 +215,14 @@ const RegisterCompany = () => {
           </div>
         </div>
         <div className="register-container">
+          {progress && (
+            <>
+              <LinearProgress></LinearProgress>
+              <Alert severity="info" className="alert">
+                Transaction is in progress...
+              </Alert>
+            </>
+          )}
           {errorMsg && (
             <Alert variant="filled" severity="error">
               {errorMsg}
