@@ -147,7 +147,7 @@ const MainContent = ({ logo, children }) => {
       }
     } catch (err) {
       setDepositProgress(false);
-      console.log("Finance error");
+      alert("Insufficient funds");
     }
   };
 
